@@ -1,0 +1,1 @@
+Pinfold realtime board: a teammate's live cursor and a card outlined while they move it between columns.

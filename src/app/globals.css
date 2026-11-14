@@ -1,26 +1,53 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-canvas: #f4f3ef;
+  --color-surface: #ffffff;
+  --color-lane: #ebe9e3;
+  --color-ink: #17181c;
+  --color-ink-soft: #5f626b;
+  --color-line: #e2dfd7;
+  --color-tomato: #ff5c39;
+  --color-tomato-deep: #e5482a;
+
+  --font-display: var(--font-bricolage);
+  --font-sans: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+::selection { background: rgb(255 92 57 / 0.2); }
+
+.dot-grid {
+  background-image: radial-gradient(rgb(23 24 28 / 0.09) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+.card-shadow {
+  box-shadow: 0 1px 0 rgb(23 24 28 / 0.04), 0 1px 3px rgb(23 24 28 / 0.08);
+}
+.lift-shadow {
+  box-shadow: 0 2px 4px rgb(23 24 28 / 0.08), 0 18px 40px -12px rgb(23 24 28 / 0.35);
+}
+
+/* Fake cursors on the landing page */
+@keyframes roam-a { 0%,100% { transform: translate(0,0); } 30% { transform: translate(120px,40px); } 60% { transform: translate(60px,110px); } }
+@keyframes roam-b { 0%,100% { transform: translate(0,0); } 35% { transform: translate(-110px,60px); } 70% { transform: translate(-40px,-30px); } }
+@keyframes roam-c { 0%,100% { transform: translate(0,0); } 40% { transform: translate(80px,-50px); } 75% { transform: translate(150px,20px); } }
+.roam-a { animation: roam-a 9s ease-in-out infinite; }
+.roam-b { animation: roam-b 11s ease-in-out infinite; }
+.roam-c { animation: roam-c 10s ease-in-out infinite; }
+
+@keyframes pop { from { opacity: 0; transform: translateY(6px) scale(0.98); } to { opacity: 1; transform: none; } }
+.pop { animation: pop 0.25s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+dialog::backdrop { background: rgb(23 24 28 / 0.35); backdrop-filter: blur(2px); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
 }
