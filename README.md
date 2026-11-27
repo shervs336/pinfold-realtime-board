@@ -14,9 +14,9 @@ A Kanban board built for teams working at the same time. You see teammates' curs
 |---|---|
 | ![Landing page](docs/screenshots/desktop/01-landing.png) | ![Another user's cursor and drag, seen live](docs/screenshots/desktop/03-live-collaboration.png) |
 
-| Card details | People on the board |
-|---|---|
-| ![Card editor](docs/screenshots/desktop/04-card-editor.png) | ![Who's here and their roles](docs/screenshots/desktop/05-people.png) |
+| Card details | People on the board | AI summary |
+|---|---|---|
+| ![Card editor](docs/screenshots/desktop/04-card-editor.png) | ![Who's here and their roles](docs/screenshots/desktop/05-people.png) | ![AI board summary](docs/screenshots/desktop/09-ai-summary.png) |
 
 | Mobile landing | Mobile board | Mobile card |
 |---|---|---|
@@ -30,6 +30,10 @@ More in [`docs/screenshots`](docs/screenshots). The case study is in [`docs/case
 - **"Maya is moving this":** a card is outlined in the dragger's color on everyone else's screen while they move it.
 - **Instant sync** of cards and columns through Postgres change streams. Your own edits are optimistic, so they appear immediately and roll back with a clear message if the save fails.
 - **Drag and drop** between columns with mouse, touch or keyboard (dnd-kit), using fractional positions so a move writes one row.
+- **AI board summary:**
+  - One click writes where the board stands: a headline, one line per column, the cards that need attention (each opens on click) and next steps.
+  - Gemini structured output, read as the signed-in member so Row Level Security decides what can be summarized.
+  - Reused while the board hasn't changed, rate-limited per person, and the dialog says what's sent to the model.
 - **Undo and redo** (Ctrl+Z / Ctrl+Shift+Z) of your own adds, edits, moves and even deleted columns with their cards.
 - **Workspaces and roles:** create boards and invite people by link as editors or viewers. Owners manage roles.
 - **One-click demo:** guests join a shared board without an email (Supabase anonymous sign-in). A daily Vercel Cron job resets it.
@@ -76,12 +80,12 @@ All access control lives in the database ([`supabase/schema.sql`](supabase/schem
 | Mobile | 96 | 100 | 100 | 100 |
 
 ## Stack ($0)
-Next.js 16 (App Router, Proxy) · TypeScript · Tailwind CSS v4 · Supabase (Postgres, Auth with magic links + anonymous sign-in, Realtime) · dnd-kit · Vercel Hobby (+ Cron)
+Next.js 16 (App Router, Proxy) · TypeScript · Tailwind CSS v4 · Supabase (Postgres, Auth with magic links + anonymous sign-in, Realtime) · dnd-kit · AI SDK + Gemini (board summary, free tier) · Vercel Hobby (+ Cron)
 
 ## Run locally
 ```bash
 npm install
-cp .env.example .env.local   # Supabase URL, publishable key, secret key, CRON_SECRET
+cp .env.example .env.local   # Supabase URL, publishable key, secret key, CRON_SECRET, GOOGLE_GENERATIVE_AI_API_KEY (optional, for summaries)
 npm run dev
 ```
 

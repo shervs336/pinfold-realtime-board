@@ -67,6 +67,11 @@ The goal was a board that feels shared, where you can see your teammates working
 
 ## What I'd do next
 
-- An AI "summarize this board" button using the same free Gemini setup as Lanternly.
 - Column reordering by drag.
 - An activity feed ("Maya moved *Live cursors* to Review").
+
+## Added later: AI board summary
+
+A **Summarize** button asks Gemini for a structured summary of the board: a headline, one line per column, the cards that need attention and next steps. The data is read as the signed-in member, so the same Row Level Security rules apply. A summary is reused until a card changes, and each person can ask for six every ten minutes (per server instance), which keeps it inside the free tier. The dialog says that card text is sent to Google.
+
+![AI board summary](screenshots/desktop/09-ai-summary.png)

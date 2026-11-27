@@ -16,7 +16,7 @@ import {
   type DragStartEvent,
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { PlusIcon, Redo2Icon, Undo2Icon, UsersIcon } from "lucide-react";
+import { PlusIcon, Redo2Icon, SparklesIcon, Undo2Icon, UsersIcon } from "lucide-react";
 import { useBoard } from "@/hooks/use-board";
 import { usePresence, type Peer } from "@/hooks/use-presence";
 import { between } from "@/lib/positions";
@@ -29,6 +29,7 @@ import { CardEditor } from "./card-editor";
 import { Cursors } from "./cursors";
 import { MembersDialog } from "./members-dialog";
 import { ProfileDialog } from "./profile-dialog";
+import { SummaryDialog } from "./summary-dialog";
 
 type User = { id: string; email: string | null; anonymous: boolean };
 
@@ -64,6 +65,7 @@ export function BoardApp({ boardId, user }: { boardId: string; user: User }) {
   // ───── dialogs + notices ─────
   const [openCardId, setOpenCardId] = useState<string | null>(null);
   const [membersOpen, setMembersOpen] = useState(false);
+  const [summaryOpen, setSummaryOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   useEffect(() => {
     if (!api.notice) return;
@@ -224,6 +226,11 @@ export function BoardApp({ boardId, user }: { boardId: string; user: User }) {
             {onlinePeers.length === 0 && <UsersIcon className="mx-1.5 size-4 text-ink-soft" />}
           </button>
 
+          <button type="button" onClick={() => setSummaryOpen(true)} className={`${btnOutline} py-1.5`} aria-label="Summarize this board with AI">
+            <SparklesIcon className="size-4 text-tomato" aria-hidden />
+            <span className="hidden sm:inline">Summarize</span>
+          </button>
+
           <div className="flex items-center">
             <button type="button" onClick={() => void api.undo()} disabled={!api.canUndo} aria-label="Undo (Ctrl+Z)" title="Undo (Ctrl+Z)" className={`${btnGhost} px-2`}>
               <Undo2Icon className="size-4" />
@@ -300,6 +307,18 @@ export function BoardApp({ boardId, user }: { boardId: string; user: User }) {
         onClose={() => setOpenCardId(null)}
         onSave={(id, patch) => void api.updateCard(id, patch)}
         onDelete={(id) => void api.deleteCard(id)}
+      />
+      <SummaryDialog
+        open={summaryOpen}
+        onClose={() => setSummaryOpen(false)}
+        boardId={boardId}
+        onPickCard={(title) => {
+          const card = cards.find((c) => c.title === title);
+          if (card) {
+            setSummaryOpen(false);
+            setOpenCardId(card.id);
+          }
+        }}
       />
       <MembersDialog
         open={membersOpen}
